@@ -112,6 +112,35 @@
                 </div>
             </div>
 
+            <hr>
+
+            {% if model.status == PredictionStatus.NEW.value %}
+            <div class="row">
+                <form action="{% url 'update_model' slug=model.slug %}" method="post">
+                    {% csrf_token %}
+                    <div class="col-12 my-2">
+                        <h4>Upload Dataset</h4>
+
+                        <div class="row">
+                            <div class="col-md-4 col-sm-12">
+                                <label for="file" class="form-label">Dataset</label>
+                                {{ upload_form.file }}
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                                <label for="name" class="form-label">Store dataset as: (optional)</label>
+                                {{ upload_form.name }}
+                            </div>
+
+                            <div class="col-md-4 col-sm-12 mb-0">
+                                <label for="model_field" class="form-label">Finalize</label> <br>
+                                <button type="submit" class="btn btn-primary end">Upload</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            {% endif %}
+
         </div>
     </main>
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
