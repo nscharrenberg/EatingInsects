@@ -1,4 +1,4 @@
-from app.forms.manager_form import CreateNetworkForm
+from app.forms.create_network_form import CreateNetworkForm
 from app.models import Predictor
 
 
