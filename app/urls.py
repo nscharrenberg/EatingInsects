@@ -5,6 +5,7 @@ from . import views
 
 urlpatterns = [
     path('models/create', views.create_model, name='create_model'),
-    path('models/update/<slug:slug>', views.train_model, name='train_model'),
+    path('models/update/<slug:slug>', views.update_model, name='update_model'),
+    path('models/delete/<slug:slug>', views.delete_model, name='delete_model'),
     path('models', views.models_overview, name='all_model'),
 ]

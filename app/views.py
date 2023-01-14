@@ -5,6 +5,7 @@ from app.business import predictors
 from app.forms.manager_form import CreateNetworkForm
 from app.models import PredictionType, ModelType, Predictor
 
+
 def models_overview(request):
     models = predictors.get_all()
 
@@ -13,7 +14,6 @@ def models_overview(request):
     }
 
     return render(request, 'manager/list.html', context)
-
 
 
 # Create the Network Model Definition ready to be trained and saved.
@@ -45,6 +45,20 @@ def create_model(request):
 
     return render(request, 'manager/builder.html', context)
 
-# Train the selected Network Model Definition with a given or selected dataset.
-def train_model(request, slug):
-    return redirect('create_model')
+
+# Update the selected Network Model Definition
+def update_model(request, slug):
+    context = {
+
+    }
+
+    return render(request, 'manager/update.html', context)
+
+
+# Delete the selected Network Model Definition and its models
+def delete_model(request, slug):
+    context = {
+
+    }
+
+    return render(request, 'manager/update.html', context)
