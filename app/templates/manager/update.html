@@ -116,7 +116,7 @@
 
             {% if model.status == PredictionStatus.NEW.value %}
             <div class="row">
-                <form action="{% url 'update_model' slug=model.slug %}" method="post">
+                <form action="{% url 'update_model' slug=model.slug %}" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="col-12 my-2">
                         <h4>Upload Dataset</h4>
@@ -139,6 +139,20 @@
                     </div>
                 </form>
             </div>
+                {% else %}
+                <div class="row">
+                    <div class="col-12 my-2">
+                        <h4>Dataset: {{ model.dataset.name }}</h4>
+
+                        <div class="row">
+                            <div class="col-12">
+                                  <textarea class="form-control" id="dataset" rows="3">
+                                    {{ dataset }}
+                                  </textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             {% endif %}
 
         </div>

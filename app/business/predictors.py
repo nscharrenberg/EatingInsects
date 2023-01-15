@@ -1,5 +1,7 @@
 from app.forms.create_network_form import CreateNetworkForm
 from app.models import Predictor
+from app.models.Dataset import Dataset
+from app.models.PredictionStatus import PredictionStatus
 
 
 def get_all():
@@ -38,6 +40,19 @@ def create_model(form: CreateNetworkForm) -> Predictor:
     predictor.save()
 
     return predictor
+
+
+def attach_dataset(slug: str, dataset: Dataset) -> Predictor:
+    model = get_by_slug(slug)
+
+    if model.status != PredictionStatus.NEW.value:
+        raise Exception("A dataset has already been attached to this model and can not be changed.")
+
+    model.dataset = dataset
+    model.status = PredictionStatus.UPLOADED
+    model.save()
+
+    return model
 
 
 def generate_slug(predictor: Predictor):

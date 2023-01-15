@@ -1,10 +1,11 @@
 import os
 
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django import forms
 
-from app.business import predictors
+from app.business import predictors, datasets
 from app.forms.create_network_form import CreateNetworkForm
 from app.forms.upload_dataset_form import UploadDatasetForm
 from app.models import PredictionType, ModelType, Predictor
@@ -83,29 +84,31 @@ def update_model(request, slug):
 
     if model.status == PredictionStatus.NEW.value:
         if request.method == 'POST':
-            context['upload_form'] = UploadDatasetForm(request.POST, request.FILES)
+            uploaded_form = UploadDatasetForm(request.POST, request.FILES)
+            context['upload_form'] = uploaded_form
 
-            if context['upload_form'].is_valid():
-                dataset_file = context['upload_form'].file
-                dataset_name = context['upload_form'].name
+            if uploaded_form.is_valid():
+                try:
+                    dataset = datasets.upload_dataset(uploaded_form)
 
-                if not dataset_name:
-                    dataset_name = dataset_file.name
+                    model = predictors.attach_dataset(model.slug, dataset)
 
-                location = upload_dataset(file=dataset_file, name=dataset_name)
-
-                dataset = Dataset(name=dataset_name, location=location)
-                dataset.save()
-
-                model.dataset = dataset
-                model.save()
-
-                messages.success(request, 'Dataset "{}" has been uploaded for {}'.format(dataset_name, model.slug))
+                    messages.success(request, 'Dataset "{}" has been uploaded for {}'.format(dataset.name, model.slug))
+                except Exception as error:
+                    messages.error(request, str(error))
 
                 return redirect('update_model', slug=model.slug)
         else:
             context['upload_form'] = UploadDatasetForm()
-    elif model.status == PredictionStatus.UPLOADED.value:
+    else:
+        uploaded_dataset = model.dataset.location
+        try:
+            uploaded_dataset.open('r')
+            context['dataset'] = uploaded_dataset.read()
+        finally:
+            uploaded_dataset.close()
+
+    if model.status == PredictionStatus.UPLOADED.value:
         print("Dataset uploaded. You need to train the model on the dataset before continueing.")
     elif model.status == PredictionStatus.TRAINED.value:
         print("Trained you can now both test and save the model")
@@ -126,13 +129,3 @@ def delete_model(request, slug):
     }
 
     return render(request, 'manager/update.html', context)
-
-
-# TODO: Probably want to do some dataset validation to ensure the required features/columns are present
-def upload_dataset(file, name) -> str:
-    location = 'datasets/{}'.format(name)
-    with open(location, "wb+") as destination:
-        for chunk in file.chunks():
-            destination.write(chunk)
-
-    return location
