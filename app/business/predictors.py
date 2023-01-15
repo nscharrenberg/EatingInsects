@@ -19,9 +19,24 @@ def get_by_slug(slug):
 
 
 def predict(form: PredictionForm) -> Protein:
-    print("Predicting...")
+    # TODO: CHeck if Protein is already predicted
+    protein = Protein(yield_ml=form['yield_ml'].value(),
+                      yield_um=form['yield_um'].value(),
+                      calculated_mw=form['calculated_mw'].value(),
+                      calculated_pi=form['calculated_pi'].value(),
+                      sequence_length=form['sequence_length'].value(),
+                      sequence_mass=form['sequence_mass'].value(),
+                      gene_product_type=form['gene_product_type'].value(),
+                      gene_name=form['gene_name'].value(),
+                      cell_location=form['cell_location'].value(),
+                      amino_acid_sequence=form['amino_acid_sequence'].value(),
+                      organism=form['organism'].value())
+
     # TODO: Make Prediction
-    return None
+    protein.solubility = 0.5
+    protein.save()
+
+    return protein
 
 
 def create_model(form: CreateNetworkForm) -> Predictor:
