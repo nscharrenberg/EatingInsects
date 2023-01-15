@@ -1,0 +1,194 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Protein Property Predictor - Models</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <style>
+      .bi {
+        vertical-align: -.125em;
+        fill: currentColor;
+      }
+
+      .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+      }
+
+      .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+    </style>
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/offcanvas-navbar.css' %}" rel="stylesheet">
+  </head>
+  <body class="bg-light">
+    <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark" aria-label="Main navigation">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Protein Property Predictor</a>
+        <button class="navbar-toggler p-0 border-0" type="button" id="navbarSideCollapse" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{% url 'make_prediction' %}">Search Engine</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'all_model' %}">Model Builder</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+{#    <div class="nav-scroller bg-body shadow-sm">#}
+{#      <nav class="nav" aria-label="Secondary navigation">#}
+{#        <a class="nav-link active" aria-current="page" href="#">Dashboard</a>#}
+{#        <a class="nav-link" href="#"> Friends <span class="badge text-bg-light rounded-pill align-text-bottom">27</span>#}
+{#        </a>#}
+{#        <a class="nav-link" href="#">Explore</a>#}
+{#        <a class="nav-link" href="#">Suggestions</a>#}
+{#        <a class="nav-link" href="#">Link</a>#}
+{#        <a class="nav-link" href="#">Link</a>#}
+{#        <a class="nav-link" href="#">Link</a>#}
+{#        <a class="nav-link" href="#">Link</a>#}
+{#        <a class="nav-link" href="#">Link</a>#}
+{#      </nav>#}
+{#    </div>#}
+    <main class="container">
+        <div class="my-3">
+            {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'error' %}
+                    <div class="alert alert-danger d-flex align-items-center rounded shadow-sm">
+                        <i class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"></i>
+                    {{ message }}
+                  </div>
+                {% elif message.tags == 'success' %}
+                    <div class="alert alert-success d-flex align-items-center rounded shadow-sm">
+                    <i class="bi bi-check-circle-fill flex-shrink-0 me-2"></i>
+                    {{ message }}
+                  </div>
+                {% else %}
+                    <div class="alert alert-primary d-flex align-items-center rounded shadow-sm">
+                    <i class="bi bi-info-circle-fill flex-shrink-0 me-2"></i>
+                    {{ message }}
+                  </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        </div>
+        <div class="my-3 p-3 bg-body rounded shadow-sm">
+            <div class="d-flex justify-content-between border-bottom pb-2 mb-0 ">
+              <h3>Predict Protein Property</h3>
+            </div>
+
+            <form action="{% url 'make_prediction' %}" method="post">
+                {% csrf_token %}
+
+                <div class="row">
+                    <div class="col-12 my-2">
+                        <label for="selected_model" class="form-label">What model do you want to use?</label>
+                        {{ form.selected_model }}
+                    </div>
+                    <div class="col-md-4 col-sm-12 my-2">
+                        <label for="selected_model" class="form-label">yield (uM)</label>
+                        {{ form.yield_um }}
+                    </div>
+                    <div class="col-md-4 col-sm-12 my-2">
+                        <label for="selected_model" class="form-label">yield (ml)</label>
+                        {{ form.yield_ml }}
+                    </div>
+                    <div class="col-md-4 col-sm-12 my-2">
+                        <label for="selected_model" class="form-label">Calculate MW</label>
+                        {{ form.calculated_mw }}
+                    </div>
+                    <div class="col-md-4 col-sm-12 my-2">
+                        <label for="selected_model" class="form-label">Calculate PI</label>
+                        {{ form.calculated_pi }}
+                    </div>
+                    <div class="col-md-4 col-sm-12 my-2">
+                        <label for="selected_model" class="form-label">Sequence Length</label>
+                        {{ form.sequence_length }}
+                    </div>
+                    <div class="col-md-4 col-sm-12 my-2">
+                        <label for="selected_model" class="form-label">Sequence Mass</label>
+                        {{ form.sequence_mass }}
+                    </div>
+                    <div class="col-12 my-2">
+                        <label for="selected_model" class="form-label">Amino Acid Sequence</label>
+                        {{ form.amino_acid_sequence }}
+                    </div>
+                    <div class="col-md-4 col-sm-12 my-2">
+                        <label for="selected_model" class="form-label">Gene Name</label>
+                        {{ form.gene_name }}
+                    </div>
+                    <div class="col-md-4 col-sm-12 my-2">
+                        <label for="selected_model" class="form-label">Gene Product Type</label>
+                        {{ form.gene_product_type }}
+                    </div>
+                    <div class="col-md-4 col-sm-12 my-2">
+                        <label for="selected_model" class="form-label">Organism</label>
+                        {{ form.organism }}
+                    </div>
+                    <div class="col-md-4 col-sm-12 my-2">
+                        <label for="selected_model" class="form-label">Cell Location</label>
+                        {{ form.cell_location }}
+                    </div>
+                    <div class="col-12 my-2 d-grid gap-2">
+                        <button type="submit" class="btn btn-primary p-3">Predict</button>
+                    </div>
+                </div>
+            </form>
+
+            <hr>
+
+            <div class="row">
+                <div class="col-12 my-2">
+                        <div class="px-4 py-5 my-5 text-center">
+                                {% if protein %}
+                                    <h1 class="display-5 fw-bold">Predicted Properties</h1>
+                                <div class="col-lg-6 mx-auto">
+                                <table class="table table-borderless">
+                                  <thead>
+                                    <tr>
+                                      <th scope="col">Property</th>
+                                        <th scope="col">Prediction</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr>
+                                      <td>Solubility</td>
+                                      <td>{{ protein.solubility }}</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                                    </div>
+                                {% else %}
+                                <h1 class="display-5 fw-bold">No Predictions</h1>
+                                <div class="col-lg-6 mx-auto">
+                                    <p class="lead mb-4">This protein has not been predicted yet.</p>
+                                    </div>
+                                </div>
+                                {% endif %}
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </main>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/offcanvas-navbar.js' %}"></script>
+  </body>
+</html>

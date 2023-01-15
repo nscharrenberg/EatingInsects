@@ -1,6 +1,7 @@
 from app.forms.config_model_form import ConfigModelForm
 from app.forms.create_network_form import CreateNetworkForm
-from app.models import Predictor
+from app.forms.prediction_form import PredictionForm
+from app.models import Predictor, Protein
 from app.models.Dataset import Dataset
 from app.models.PredictionStatus import PredictionStatus
 
@@ -9,8 +10,18 @@ def get_all():
     return Predictor.objects.all()
 
 
+def get_published():
+    return Predictor.objects.filter(status=PredictionStatus.SAVED.value).all()
+
+
 def get_by_slug(slug):
     return Predictor.objects.get(slug=slug)
+
+
+def predict(form: PredictionForm) -> Protein:
+    print("Predicting...")
+    # TODO: Make Prediction
+    return None
 
 
 def create_model(form: CreateNetworkForm) -> Predictor:

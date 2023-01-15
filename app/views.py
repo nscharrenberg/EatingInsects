@@ -1,16 +1,13 @@
-import os
-
-from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
-from django.contrib import messages
 from django import forms
+from django.contrib import messages
+from django.shortcuts import render, redirect
 
 from app.business import predictors, datasets
 from app.forms.config_model_form import ConfigModelForm
 from app.forms.create_network_form import CreateNetworkForm
+from app.forms.prediction_form import PredictionForm
 from app.forms.upload_dataset_form import UploadDatasetForm
-from app.models import PredictionType, ModelType, Predictor
-from app.models.Dataset import Dataset
+from app.models import PredictionType, ModelType
 from app.models.PredictionStatus import PredictionStatus
 
 
@@ -147,3 +144,21 @@ def delete_model(request, slug):
     }
 
     return render(request, 'manager/update.html', context)
+
+
+def prediction_page(request):
+    form = PredictionForm()
+    protein = None
+
+    if request.method == 'POST':
+        form = PredictionForm(request.POST)
+
+        if form.is_valid():
+            protein = predictors.predict(form)
+
+    context = {
+        'form': form,
+        'protein': protein
+    }
+
+    return render(request, 'prediction/form.html', context)

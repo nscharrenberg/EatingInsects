@@ -9,13 +9,13 @@ class Protein(models.Model):
     calculated_pi = models.DecimalField(decimal_places=2, max_digits=12)
     sequence_length = models.BigIntegerField()
     sequence_mass = models.BigIntegerField()
-    gene_product_type = models.TextField()
+    gene_product_type = models.TextField(null=True)
 
     # Output Field
     solubility = models.DecimalField(decimal_places=2, max_digits=12, null=True)
 
     # Miscellaneous Fields
-    gene_name = models.TextField(null=True)
+    gene_name = models.TextField()
     cell_location = models.TextField(null=True)
     amino_acid_sequence = models.TextField()
     organism = models.TextField(null=True)
