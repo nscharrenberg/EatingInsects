@@ -6,6 +6,7 @@ from django.contrib import messages
 from django import forms
 
 from app.business import predictors, datasets
+from app.forms.config_model_form import ConfigModelForm
 from app.forms.create_network_form import CreateNetworkForm
 from app.forms.upload_dataset_form import UploadDatasetForm
 from app.models import PredictionType, ModelType, Predictor
@@ -101,21 +102,38 @@ def update_model(request, slug):
         else:
             context['upload_form'] = UploadDatasetForm()
     else:
-        uploaded_dataset = model.dataset.location
-        try:
-            uploaded_dataset.open('r')
-            context['dataset'] = uploaded_dataset.read()
-        finally:
-            uploaded_dataset.close()
+        context['dataset'] = datasets.read_dataset(model.dataset)
 
     if model.status == PredictionStatus.UPLOADED.value:
-        print("Dataset uploaded. You need to train the model on the dataset before continueing.")
-    elif model.status == PredictionStatus.TRAINED.value:
-        print("Trained you can now both test and save the model")
+        if request.method == 'POST':
+            config_form = ConfigModelForm(request.POST)
+            context['config_form'] = config_form
+
+            if config_form.is_valid():
+                try:
+                    model = predictors.train(model.slug, config_form)
+
+                    messages.success(request, "The model has been configured and trained on the dataset.")
+                except Exception as error:
+                    messages.error(request, str(error))
+
+                return redirect('update_model', slug=model.slug)
+        else:
+            context['config_form'] = ConfigModelForm()
+
+    if model.status == PredictionStatus.TRAINED.value:
+        if request.method == 'POST':
+            model = predictors.test(model.slug)
+            messages.success(request, "The model has been tested and the performance has been calculated.")
+
+            return redirect('update_model', slug=model.slug)
     elif model.status == PredictionStatus.TESTED.value:
-        print("Tested you can now save the model")
-    elif model.status == PredictionStatus.SAVED.value:
-        print("Saved nothing more to do")
+        if request.method == 'POST':
+            model = predictors.export(model.slug)
+
+            messages.success(request, "The model has been exported and can now be used throughout the system")
+
+            return redirect('update_model', slug=model.slug)
     else:
         print("Error")
 

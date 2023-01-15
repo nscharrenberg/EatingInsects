@@ -24,3 +24,12 @@ def upload_dataset(form: UploadDatasetForm) -> Dataset:
     dataset.save()
 
     return dataset
+
+
+def read_dataset(dataset: Dataset) -> str:
+    uploaded_dataset = dataset.location
+    try:
+        uploaded_dataset.open('r')
+        return uploaded_dataset.read()
+    finally:
+        uploaded_dataset.close()

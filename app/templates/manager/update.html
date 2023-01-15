@@ -92,7 +92,11 @@
         </div>
         <div class="my-3 p-3 bg-body rounded shadow-sm">
             <div class="d-flex justify-content-between border-bottom pb-2 mb-0 ">
-              <h3>Model: {{ model.slug }}</h3>
+              <h3>
+                  Model: {{ model.slug }}
+
+                  <span class="badge text-bg-primary">{{ model.status }}</span>
+              </h3>
               <a href="{% url 'all_model' %}" class="btn btn-outline-primary">
                 <i class="bi bi-arrow-left-circle flex-shrink-0 me-2"></i> Back to Models</a>
             </div>
@@ -112,41 +116,42 @@
                 </div>
             </div>
 
-            <hr>
-
             {% if model.status == PredictionStatus.NEW.value %}
-            <div class="row">
-                <form action="{% url 'update_model' slug=model.slug %}" method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div class="col-12 my-2">
-                        <h4>Upload Dataset</h4>
+                <hr>
 
-                        <div class="row">
-                            <div class="col-md-4 col-sm-12">
-                                <label for="file" class="form-label">Dataset</label>
-                                {{ upload_form.file }}
-                            </div>
-                            <div class="col-md-4 col-sm-12">
-                                <label for="name" class="form-label">Store dataset as: (optional)</label>
-                                {{ upload_form.name }}
+                <div class="row">
+                    <form action="{% url 'update_model' slug=model.slug %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="col-12 my-2">
+                            <div class="d-flex justify-content-between border-bottom pb-2 mb-0 ">
+                              <h4>Upload Dataset</h4>
+                              <button type="submit" class="btn btn-primary end">Upload</button>
                             </div>
 
-                            <div class="col-md-4 col-sm-12 mb-0">
-                                <label for="model_field" class="form-label">Finalize</label> <br>
-                                <button type="submit" class="btn btn-primary end">Upload</button>
+
+                            <div class="row">
+                                <div class="col-md-6 col-sm-12">
+                                    <label for="file" class="form-label">Dataset</label>
+                                    {{ upload_form.file }}
+                                </div>
+                                <div class="col-md-6 col-sm-12">
+                                    <label for="name" class="form-label">Store dataset as: (optional)</label>
+                                    {{ upload_form.name }}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </form>
-            </div>
+                    </form>
+                </div>
                 {% else %}
+                <hr>
+
                 <div class="row">
                     <div class="col-12 my-2">
                         <h4>Dataset: {{ model.dataset.name }}</h4>
 
                         <div class="row">
-                            <div class="col-12">
-                                  <textarea class="form-control" id="dataset" rows="3">
+                            <div class="col-12 mt-2">
+                                  <textarea class="form-control" id="dataset" rows="6">
                                     {{ dataset }}
                                   </textarea>
                             </div>
@@ -154,6 +159,169 @@
                     </div>
                 </div>
             {% endif %}
+
+
+        {% if model.status == PredictionStatus.UPLOADED.value %}
+            <hr>
+
+            <div class="row">
+                    <form action="{% url 'update_model' slug=model.slug %}" method="post">
+                        {% csrf_token %}
+                        <div class="col-12 my-2">
+                            <div class="d-flex justify-content-between border-bottom pb-2 mb-0 ">
+                              <h4>Train Model</h4>
+                              <button type="submit" class="btn btn-primary end">Train</button>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4 col-sm-12 mt-2">
+                                    <label for="file" class="form-label">Seed</label>
+                                    {{ config_form.seed }}
+                                </div>
+                                <div class="col-md-4 col-sm-12 mt-2">
+                                    <label for="file" class="form-label">Test Split</label>
+                                    {{ config_form.test_split }}
+                                </div>
+                                <div class="col-md-4 col-sm-12 mt-2">
+                                    <label for="file" class="form-label">Batch Size</label>
+                                    {{ config_form.batch_size }}
+                                </div>
+                                <div class="col-md-4 col-sm-12 mt-2">
+                                    <label for="file" class="form-label">Epochs</label>
+                                    {{ config_form.epochs }}
+                                </div>
+                                <div class="col-md-4 col-sm-12 mt-2">
+                                    <label for="file" class="form-label">Learning Rate</label>
+                                    {{ config_form.learning_rate }}
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            {% elif model.status != PredictionStatus.NEW.value and model.status != PredictionStatus.UPLOADED.value %}
+            <hr>
+
+            <div class="row">
+                    <div class="col-12 my-2">
+                            <div class="d-flex justify-content-between border-bottom pb-2 mb-0 ">
+                              <h4>Model Configuration</h4>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4 col-sm-12 mt-2">
+                                    <label class="form-label">Seed</label>
+                                    <input type="number" disabled class="form-control" value="{{ model.seed }}">
+                                </div>
+                                <div class="col-md-4 col-sm-12 mt-2">
+                                    <label class="form-label">Test Split</label>
+                                    <input type="number" disabled class="form-control" value="{{ model.split }}">
+                                </div>
+                                <div class="col-md-4 col-sm-12 mt-2">
+                                    <label class="form-label">Batch Size</label>
+                                    <input type="number" disabled class="form-control" value="{{ model.batch_size }}">
+                                </div>
+                                <div class="col-md-4 col-sm-12 mt-2">
+                                    <label class="form-label">Epochs</label>
+                                    <input type="number" disabled class="form-control" value="{{ model.epochs }}">
+                                </div>
+                                <div class="col-md-4 col-sm-12 mt-2">
+                                    <label class="form-label">Learning Rate</label>
+                                    <input type="number" disabled class="form-control" value="{{ model.learning_rate }}">
+                                </div>
+                            </div>
+                        </div>
+                </div>
+        {% endif %}
+
+        {% if model.status == PredictionStatus.TRAINED.value %}
+            <hr>
+
+            <div class="row">
+                <form action="{% url 'update_model' slug=model.slug %}" method="post">
+                    {% csrf_token %}
+                    <div class="col-12 my-2">
+                        <div class="d-flex justify-content-between border-bottom pb-2 mb-0 ">
+                            <h4>Performance</h4>
+                        </div>
+                        <div class="px-4 py-5 my-5 text-center">
+                            <h1 class="display-5 fw-bold">No Performance Results known</h1>
+                            <div class="col-lg-6 mx-auto">
+                                <p class="lead mb-4">It seems like the model has not been tested yet. Thus no performance results are known. Quickly test your model below.</p>
+                                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                                    <button type="submit" class="btn btn-primary btn-lg px-4 gap-3">Get Performance Results</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            {% elif model.status == PredictionStatus.TESTED.value or model.status == PredictionStatus.SAVED.value %}
+            <hr>
+
+            <div class="col-12 my-2">
+                <div class="d-flex justify-content-between border-bottom pb-2 mb-0 ">
+                    <h4>Performance</h4>
+                </div>
+                <div class="my-2 text-center">
+                    <table class="table table-borderless">
+                      <thead>
+                        <tr>
+                          <th scope="col">Metric</th>
+                            <th scope="col">Result</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>RMSE</td>
+                          <td>{{ model.rmse }}</td>
+                        </tr>
+                      <tr>
+                          <td>MAE</td>
+                          <td>{{ model.mae }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if model.status == PredictionStatus.TESTED.value %}
+            <hr>
+
+            <div class="row">
+                <form action="{% url 'update_model' slug=model.slug %}" method="post">
+                    {% csrf_token %}
+                    <div class="col-12 my-2">
+                        <div class="px-4 py-5 my-5 text-center">
+                            <h1 class="display-5 fw-bold">Not Published</h1>
+                            <div class="col-lg-6 mx-auto">
+                                <p class="lead mb-4">This model has not yet been published.</p>
+                                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                                    <button type="submit" class="btn btn-primary btn-lg px-4 gap-3">Publish Now!</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            {% elif model.status == PredictionStatus.SAVED.value %}
+            <hr>
+
+            <div class="row">
+                <div class="col-12 my-2">
+                        <div class="px-4 py-5 my-5 text-center">
+                            <h1 class="display-5 fw-bold">Published</h1>
+                            <div class="col-lg-6 mx-auto">
+                                <p class="lead mb-4">This model has been published and can be used to make predictions.</p>
+                                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                                    <a href="{% url 'make_prediction' %}" class="btn btn-outline-primary btn-lg px-4 gap-3">Go to "Predictions" page</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        {% endif %}
 
         </div>
     </main>

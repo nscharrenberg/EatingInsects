@@ -1,3 +1,4 @@
+from app.forms.config_model_form import ConfigModelForm
 from app.forms.create_network_form import CreateNetworkForm
 from app.models import Predictor
 from app.models.Dataset import Dataset
@@ -50,6 +51,49 @@ def attach_dataset(slug: str, dataset: Dataset) -> Predictor:
 
     model.dataset = dataset
     model.status = PredictionStatus.UPLOADED
+    model.save()
+
+    return model
+
+
+def train(slug: str, form: ConfigModelForm) -> Predictor:
+    model = get_by_slug(slug)
+
+    if model.status != PredictionStatus.UPLOADED.value:
+        raise Exception("Can not train the model because the model has already been trained or the dataset is still "
+                        "missing.")
+
+    model.seed = form['seed'].value()
+    model.batch_size = form['batch_size'].value()
+    model.split = form['test_split'].value()
+    model.epochs = form['epochs'].value()
+    model.learning_rate = form['learning_rate'].value()
+    model.save()
+
+    # TODO: Train Model
+    print("Training...")
+
+    model.status = PredictionStatus.TRAINED.value
+    model.save()
+
+    return model
+
+
+def test(slug: str) -> Predictor:
+    model = get_by_slug(slug)
+
+    # TODO: Test the model
+
+    model.status = PredictionStatus.TESTED.value
+    model.save()
+
+    return model
+
+
+def export(slug: str) -> Predictor:
+    model = get_by_slug(slug)
+
+    model.status = PredictionStatus.SAVED.value
     model.save()
 
     return model
