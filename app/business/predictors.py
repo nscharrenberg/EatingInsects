@@ -18,6 +18,10 @@ def get_by_slug(slug):
     return Predictor.objects.get(slug=slug)
 
 
+def get_by_id(id):
+    return Predictor.objects.get(id=id)
+
+
 def predict(form) -> Protein:
     # TODO: CHeck if Protein is already predicted
     protein = Protein(yield_ml=form['yield_ml'].value(),
@@ -32,8 +36,12 @@ def predict(form) -> Protein:
                       amino_acid_sequence=form['amino_acid_sequence'].value(),
                       organism=form['organism'].value())
 
-    # TODO: Make Prediction
-    protein.solubility = 0.5
+    model = get_by_id(form['selected_model'].value())
+
+    network = SNN(model)
+    predictions = network.predict(protein)
+
+    protein.solubility = float(predictions[0][0])
     protein.save()
 
     return protein

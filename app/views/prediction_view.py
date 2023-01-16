@@ -25,6 +25,7 @@ class PredictionView(FormView):
     def post(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
         form = PredictionForm(request.POST)
+        context['form'] = form
 
         if form.is_valid():
             context['protein'] = predictors.predict(form)

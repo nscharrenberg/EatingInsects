@@ -1,12 +1,13 @@
 from django.core.files.storage import default_storage
 from tensorflow import keras
+import pandas as pd
 
-from app.models import Predictor
+from app.models import Predictor, Protein
 from app.networks.utils.processing_utils import ProcessingUtils
 
 
 class SNN:
-    def __init__(self, predictor : Predictor):
+    def __init__(self, predictor: Predictor):
         self.results = None
         self.location = 'networks/{}.h5'.format(predictor.slug)
         self.predictor = predictor
@@ -21,14 +22,11 @@ class SNN:
 
         self.extract_features()
 
-
-
         if self.predictor.location and default_storage.exists(self.predictor.location):
             self.model = keras.models.load_model(self.predictor.location)
         else:
             self.compile()
             self.train()
-
 
     def extract_features(self):
         if self.dataset_train is None or self.dataset_test is None:
@@ -79,3 +77,7 @@ class SNN:
         self.results = self.model.evaluate(self.test_features, self.test_labels, verbose=0)
 
         return self.results
+
+    def predict(self, protein: Protein):
+        model_input = protein.to_dataFrame()
+        return self.model.predict(model_input)

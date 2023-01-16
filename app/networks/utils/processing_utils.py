@@ -12,11 +12,12 @@ class ProcessingUtils:
         X = data[['Yield(uM)','Yield(ug/ml)','Calculated MW(kDa)','Calculated pI', 'Sequence length', 'Sequence mass']]
         y = data.iloc[:, 1:2]
 
-        for column in X:
-            X[column] = ProcessingUtils.normalize(X[column])
+        # for column in X:
+        #     X[column] = ProcessingUtils.normalize(X[column])
 
         X = round(X, 2)
-        y = round(ProcessingUtils.normalize(y), 2)
+        # y = round(ProcessingUtils.normalize(y), 2)
+        y = round(y, 2)
 
         return X, y
 

@@ -1,4 +1,5 @@
 from django.db import models
+import pandas as pd
 
 
 class Protein(models.Model):
@@ -20,14 +21,27 @@ class Protein(models.Model):
     amino_acid_sequence = models.TextField()
     organism = models.TextField(null=True)
 
+    def to_dict(self):
+        return {
+            'yield(uM)': float(self.yield_um),
+            'Yield(ug/ml)': float(self.yield_ml),
+            'Calculated MW(kDa)': float(self.calculated_mw),
+            'Calculated pI': float(self.calculated_pi),
+            'Sequence length': float(self.sequence_length),
+            'Sequence mass': float(self.sequence_mass)
+        }
+
+    def to_dataFrame(self):
+        df = pd.DataFrame(data=[
+            [float(self.yield_um), float(self.yield_ml), float(self.calculated_mw), float(self.calculated_pi),
+             float(self.sequence_length),
+             float(self.sequence_mass)]], columns=['Yield(uM)', 'Yield(ug/ml)', 'Calculated MW(kDa)', 'Calculated pI',
+                                                   'Sequence length', 'Sequence mass'])
+
+        return df
+
     def __str__(self):
         if not self.gene_name:
             return self.amino_acid_sequence
         else:
             return self.gene_name
-
-
-
-
-
-
