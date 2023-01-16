@@ -3,6 +3,7 @@ from app.forms.create_network_form import CreateNetworkForm
 from app.models import Predictor, Protein
 from app.models.Dataset import Dataset
 from app.models.PredictionStatus import PredictionStatus
+from app.networks.SNN.snn import SNN
 
 
 def get_all():
@@ -88,6 +89,13 @@ def train(slug: str, form: ConfigModelForm) -> Predictor:
         raise Exception("Can not train the model because the model has already been trained or the dataset is still "
                         "missing.")
 
+    if not model.dataset:
+        model.status = PredictionStatus.NEW.value
+        model.save()
+
+        raise Exception("Can not train model as there is no dataset. The status has been set back to NEW so you can "
+                        "upload a dataset.")
+
     model.seed = form['seed'].value()
     model.batch_size = form['batch_size'].value()
     model.split = form['test_split'].value()
@@ -95,8 +103,7 @@ def train(slug: str, form: ConfigModelForm) -> Predictor:
     model.learning_rate = form['learning_rate'].value()
     model.save()
 
-    # TODO: Train Model
-    print("Training...")
+    network = SNN(model)
 
     model.status = PredictionStatus.TRAINED.value
     model.save()
@@ -107,7 +114,11 @@ def train(slug: str, form: ConfigModelForm) -> Predictor:
 def test(slug: str) -> Predictor:
     model = get_by_slug(slug)
 
-    # TODO: Test the model
+    network = SNN(model)
+    results = network.test()
+
+    model.rmse = results[3]
+    model.mae = results[2]
 
     model.status = PredictionStatus.TESTED.value
     model.save()

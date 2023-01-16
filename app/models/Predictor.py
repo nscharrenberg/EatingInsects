@@ -11,7 +11,7 @@ class Predictor(models.Model):
     prediction_type = models.TextField(default=PredictionType.SOLUBILITY.value, choices=PredictionType.choices)
     version = models.TextField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    location = models.FileField(null=True)
+    location = models.TextField(null=True)
     status = models.TextField(default=PredictionStatus.NEW.value, choices=PredictionStatus.choices)
     slug = models.SlugField()
     dataset = models.ForeignKey(Dataset, on_delete=models.CASCADE, null=True)
