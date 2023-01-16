@@ -1,5 +1,4 @@
 from app.forms.upload_dataset_form import UploadDatasetForm
-from app.models import Predictor
 from app.models.Dataset import Dataset
 
 

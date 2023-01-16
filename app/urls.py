@@ -1,12 +1,11 @@
 from django.urls import path
-from django.views.generic import RedirectView
 
 from . import views
 
 urlpatterns = [
-    path('models/create', views.create_model, name='create_model'),
-    path('models/update/<slug:slug>', views.update_model, name='update_model'),
-    path('models/delete/<slug:slug>', views.delete_model, name='delete_model'),
-    path('models', views.models_overview, name='all_model'),
-    path('', views.prediction_page, name="make_prediction")
+    path('models/create', views.CreateModelView.as_view(), name='create_model'),
+    path('models/update/<slug:slug>', views.UpdateModelView.as_view(), name='update_model'),
+    path('models/delete/<slug:slug>', views.DeleteModelView.as_view(), name='delete_model'),
+    path('models', views.ModelsOverviewView.as_view(), name='all_model'),
+    path('', views.PredictionView.as_view(), name="make_prediction")
 ]

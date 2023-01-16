@@ -1,6 +1,5 @@
 from app.forms.config_model_form import ConfigModelForm
 from app.forms.create_network_form import CreateNetworkForm
-from app.forms.prediction_form import PredictionForm
 from app.models import Predictor, Protein
 from app.models.Dataset import Dataset
 from app.models.PredictionStatus import PredictionStatus
@@ -18,7 +17,7 @@ def get_by_slug(slug):
     return Predictor.objects.get(slug=slug)
 
 
-def predict(form: PredictionForm) -> Protein:
+def predict(form) -> Protein:
     # TODO: CHeck if Protein is already predicted
     protein = Protein(yield_ml=form['yield_ml'].value(),
                       yield_um=form['yield_um'].value(),
