@@ -38,7 +38,7 @@ def predict(form) -> Protein:
 
     model = get_by_id(form['selected_model'].value())
 
-    network = SNN(model)
+    network = load_network(model)
     predictions = network.predict(protein)
 
     protein.solubility = float(predictions[0][0])
@@ -111,7 +111,7 @@ def train(slug: str, form: ConfigModelForm) -> Predictor:
     model.learning_rate = form['learning_rate'].value()
     model.save()
 
-    network = SNN(model)
+    load_network(model)
 
     model.status = PredictionStatus.TRAINED.value
     model.save()
@@ -122,7 +122,7 @@ def train(slug: str, form: ConfigModelForm) -> Predictor:
 def test(slug: str) -> Predictor:
     model = get_by_slug(slug)
 
-    network = SNN(model)
+    network = load_network(model)
     results = network.test()
 
     model.rmse = results[3]
@@ -158,3 +158,8 @@ def is_model_exists(model_type: str, prediction_type: str, version: str) -> bool
         return True
 
     return False
+
+
+def load_network(predictor: Predictor):
+    if predictor.model_type == 'SNN':
+        return SNN(predictor)
