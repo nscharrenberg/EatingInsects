@@ -3,7 +3,7 @@ import pandas as pd
 from app.business import predictors
 from app.models import Predictor
 from app.models.Dataset import Dataset
-
+from sklearn.model_selection import train_test_split
 
 class ProcessingUtils:
     @staticmethod
@@ -34,7 +34,7 @@ class ProcessingUtils:
         return X, y
 
     @staticmethod
-    def load_train_and_test_sets(X, y, model: Predictor):
+    def load_train_and_test_sets2(X, y, model: Predictor):
         prediction_property_key = predictors.get_prediction_type_by_key(model.prediction_type)
         sample_set = X.copy()
         sample_set[prediction_property_key] = y[prediction_property_key]
@@ -46,6 +46,28 @@ class ProcessingUtils:
         test_dataset = sample_set.drop(train_dataset.index)
 
         return train_dataset, test_dataset
+
+    @staticmethod
+    def load_train_and_test_sets(X, y, model: Predictor):
+        prediction_property_key = predictors.get_prediction_type_by_key(model.prediction_type)
+
+        test_size = float(model.split)
+        seed = int(model.seed)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=seed)
+
+        training_set = X_train.copy()
+        training_set[prediction_property_key] = y_train[prediction_property_key]
+        training_set = training_set[
+            [prediction_property_key] + [col for col in training_set.columns if col != prediction_property_key]]
+
+        test_set = X_test.copy()
+        test_set[prediction_property_key] = y_test[prediction_property_key]
+        test_set = test_set[
+            [prediction_property_key] + [col for col in test_set.columns if col != prediction_property_key]]
+
+        return training_set, test_set
+
+
 
     @staticmethod
     def normalize(col_data):

@@ -5,9 +5,13 @@ from app.business import predictors
 from app.models import Predictor, Protein
 from app.networks.utils.processing_utils import ProcessingUtils
 
+import tensorflow as tf
+
 
 class BaseNetwork:
     def __init__(self, predictor: Predictor):
+        tf.random.set_seed(float(predictor.seed))
+
         self.results = None
         self.location = 'resources/public/networks/{}.h5'.format(predictor.slug)
         self.predictor = predictor

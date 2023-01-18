@@ -6,6 +6,7 @@ from app.models import Predictor, Protein, ModelType, PredictionType
 from app.models.Dataset import Dataset
 from app.models.PredictionStatus import PredictionStatus
 from app.networks.SNN.snn import SNN
+from app.networks.SNN.snn_v2 import SNN2
 
 
 def get_all():
@@ -187,6 +188,8 @@ def is_model_exists(model_type: str, prediction_type: str, version: str) -> bool
 def load_network(predictor: Predictor):
     if predictor.model_type == ModelType.SNN.value:
         return SNN(predictor)
+    if predictor.model_type == ModelType.SNN2.value:
+        return SNN2(predictor)
 
 
 def extract_data_from_amino_acids(sequence: str):
