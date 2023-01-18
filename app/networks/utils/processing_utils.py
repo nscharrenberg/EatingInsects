@@ -9,20 +9,31 @@ class ProcessingUtils:
     def load_dataset(dataset: Dataset):
         raw_data = pd.read_csv(dataset.location.path)
         data = raw_data.copy()
-        X = data[['Yield(uM)','Yield(ug/ml)','Calculated MW(kDa)','Calculated pI', 'Sequence length', 'Sequence mass']]
-        y = data.iloc[:, 1:2]
-
-        # for column in X:
-        #     X[column] = ProcessingUtils.normalize(X[column])
+        X = data[
+            [
+                'Yield(uM)',
+                'Yield(ug/ml)',
+                'Calculated MW(kDa)',
+                'Calculated pI',
+                'Sequence length',
+                'Sequence mass',
+                'Steric parameter',
+                'Polarizability',
+                'Volume',
+                'Hydrophobicity',
+                'Helix probability',
+                'Sheet probability'
+            ]
+        ]
+        y = data[['Solubility(%)']]
 
         X = round(X, 2)
-        # y = round(ProcessingUtils.normalize(y), 2)
         y = round(y, 2)
 
         return X, y
 
     @staticmethod
-    def load_train_and_test_sets(X, y, model : Predictor):
+    def load_train_and_test_sets(X, y, model: Predictor):
         sample_set = X.copy()
         sample_set['Solubility(%)'] = y['Solubility(%)']
 
@@ -37,4 +48,3 @@ class ProcessingUtils:
     @staticmethod
     def normalize(col_data):
         return (col_data - col_data.min()) / (col_data.max() - col_data.min())
-

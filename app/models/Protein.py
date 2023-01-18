@@ -1,8 +1,12 @@
 from django.db import models
 import pandas as pd
 
+from app.models.Predictor import Predictor
+
 
 class Protein(models.Model):
+    predictor = models.ForeignKey(Predictor, on_delete=models.CASCADE)
+
     # Input Fields
     yield_um = models.DecimalField(decimal_places=2, max_digits=12)
     yield_ml = models.DecimalField(decimal_places=2, max_digits=12)
@@ -36,15 +40,36 @@ class Protein(models.Model):
             'Calculated MW(kDa)': float(self.calculated_mw),
             'Calculated pI': float(self.calculated_pi),
             'Sequence length': float(self.sequence_length),
-            'Sequence mass': float(self.sequence_mass)
+            'Sequence mass': float(self.sequence_mass),
+            'steric_parameter': float(self.steric_parameter),
+            'polarizability': float(self.polarizability),
+            'volume': float(self.volume),
+            'hydrophobicity': float(self.hydrophobicity),
+            'helix_probability': float(self.helix_probability),
+            'sheet_probability': float(self.sheet_probability)
         }
 
     def to_dataFrame(self):
         df = pd.DataFrame(data=[
-            [float(self.yield_um), float(self.yield_ml), float(self.calculated_mw), float(self.calculated_pi),
-             float(self.sequence_length),
-             float(self.sequence_mass)]], columns=['Yield(uM)', 'Yield(ug/ml)', 'Calculated MW(kDa)', 'Calculated pI',
-                                                   'Sequence length', 'Sequence mass'])
+            [
+                float(self.yield_um),
+                float(self.yield_ml),
+                float(self.calculated_mw),
+                float(self.calculated_pi),
+                float(self.sequence_length),
+                float(self.sequence_mass),
+                float(self.steric_parameter),
+                float(self.polarizability),
+                float(self.volume),
+                float(self.hydrophobicity),
+                float(self.helix_probability),
+                float(self.sheet_probability)
+            ]
+        ],
+            columns=['Yield(uM)', 'Yield(ug/ml)', 'Calculated MW(kDa)', 'Calculated pI',
+                     'Sequence length', 'Sequence mass', 'steric_parameter',
+                     'polarizability', 'volume', 'hydrophobicity', 'helix_probability',
+                     'sheet_probability'])
 
         return df
 

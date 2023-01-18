@@ -24,8 +24,21 @@ def get_by_id(id):
     return Predictor.objects.get(id=id)
 
 
+def get_by_amino_acid_and_predictor(predictor: Predictor, sequence: str) -> Protein|None:
+    try:
+        return Protein.objects.get(predictor=predictor, amino_acid_sequence=sequence)
+    except Exception:
+        return None
+
+
 def predict(form) -> Protein:
     amino_acid_sequence = form['amino_acid_sequence'].value()
+    model = get_by_id(form['selected_model'].value())
+
+    found_protein = get_by_amino_acid_and_predictor(model, amino_acid_sequence)
+
+    if found_protein:
+        return found_protein
 
     amino_acid_features = extract_amino_acid_features(amino_acid_sequence)
 
@@ -46,14 +59,13 @@ def predict(form) -> Protein:
                       volume=amino_acid_features['volume'],
                       hydrophobicity=amino_acid_features['hydrophobicity'],
                       helix_probability=amino_acid_features['helix'],
-                      sheet_probability=amino_acid_features['sheet'])
-
-    model = get_by_id(form['selected_model'].value())
+                      sheet_probability=amino_acid_features['sheet'],
+                      predictor=model)
 
     network = load_network(model)
     predictions = network.predict(protein)
 
-    protein.solubility = float(predictions[0][0])
+    protein.solubility = round(float(predictions[0][0]), 4)
     protein.save()
 
     return protein
@@ -240,5 +252,5 @@ def extract_amino_acid_features(sequence: str):
         'volume': round(volume, 4),
         'hydrophobicity': round(hydrophobicity, 4),
         'helix': round(helix, 4),
-        'sheet': round(sheet, 4)
+        'sheet': round(sheet, 4),
     }
