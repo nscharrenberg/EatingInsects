@@ -1,3 +1,5 @@
+import pandas as pd
+
 from app.forms.config_model_form import ConfigModelForm
 from app.forms.create_network_form import CreateNetworkForm
 from app.models import Predictor, Protein, ModelType
@@ -23,18 +25,28 @@ def get_by_id(id):
 
 
 def predict(form) -> Protein:
+    amino_acid_sequence = form['amino_acid_sequence'].value()
+
+    amino_acid_features = extract_amino_acid_features(amino_acid_sequence)
+
     # TODO: CHeck if Protein is already predicted
     protein = Protein(yield_ml=form['yield_ml'].value(),
                       yield_um=form['yield_um'].value(),
                       calculated_mw=form['calculated_mw'].value(),
                       calculated_pi=form['calculated_pi'].value(),
-                      sequence_length=form['sequence_length'].value(),
-                      sequence_mass=form['sequence_mass'].value(),
+                      sequence_length=amino_acid_features['sequence_length'],
+                      sequence_mass=amino_acid_features['sequence_mass'],
                       gene_product_type=form['gene_product_type'].value(),
                       gene_name=form['gene_name'].value(),
                       cell_location=form['cell_location'].value(),
-                      amino_acid_sequence=form['amino_acid_sequence'].value(),
-                      organism=form['organism'].value())
+                      amino_acid_sequence=amino_acid_sequence,
+                      organism=form['organism'].value(),
+                      steric_parameter=amino_acid_features['steric'],
+                      polarizability=amino_acid_features['polarizability'],
+                      volume=amino_acid_features['volume'],
+                      hydrophobicity=amino_acid_features['hydrophobicity'],
+                      helix_probability=amino_acid_features['helix'],
+                      sheet_probability=amino_acid_features['sheet'])
 
     model = get_by_id(form['selected_model'].value())
 
@@ -163,3 +175,70 @@ def is_model_exists(model_type: str, prediction_type: str, version: str) -> bool
 def load_network(predictor: Predictor):
     if predictor.model_type == ModelType.SNN.value:
         return SNN(predictor)
+
+
+def extract_data_from_amino_acids(sequence: str):
+    sequence_length = len(sequence)
+    sequence_mass = 0
+
+    aaInfo = pd.read_csv('resources/private/datasets/aa_data_solubility.csv', sep=',')
+
+    for element in sequence:
+        if element == 'X':
+            element = 'G'
+
+        try:
+            sequence_mass += aaInfo.at[aaInfo.index[aaInfo['abbreviation'] == element][0], 'Molecular weight']
+        except Exception:
+            print("amino acid \"{}\" could not be found".format(element))
+
+    return {
+        'sequence_length': sequence_length,
+        'sequence_mass': sequence_mass
+    }
+
+
+def extract_amino_acid_features(sequence: str):
+    meta_data = extract_data_from_amino_acids(sequence)
+
+    sequence_length = meta_data['sequence_length']
+    sequence_mass = meta_data['sequence_mass']
+
+    aaphy7 = pd.read_csv('resources/private/datasets/aaphy7.csv', sep=',')
+
+    steric = 0
+    polarizability = 0
+    volume = 0
+    hydrophobicity = 0
+    helix = 0
+    sheet = 0
+
+    for element in sequence:
+        if element == 'X':
+            element = 'G'
+
+        ind = aaphy7.index[aaphy7['abbreviation'] == element]
+        steric += aaphy7.at[ind[0], 'Steric parameter (graph shape index)']
+        polarizability += aaphy7.at[ind[0], 'Polarizability']
+        volume += aaphy7.at[ind[0], 'Volume (normalized van der Waals volume)']
+        hydrophobicity += aaphy7.at[ind[0], 'Hydrophobicity']
+        helix += aaphy7.at[ind[0], 'Helix probability']
+        sheet += aaphy7.at[ind[0], 'Sheet probability']
+
+    steric = steric / sequence_length
+    polarizability = polarizability / sequence_length
+    volume = volume / sequence_length
+    hydrophobicity = hydrophobicity / sequence_length
+    helix = helix / sequence_length
+    sheet = sheet / sequence_length
+
+    return {
+        'sequence_length': sequence_length,
+        'sequence_mass': round(sequence_mass, 4),
+        'steric': round(steric, 4),
+        'polarizability': round(polarizability, 4),
+        'volume': round(volume, 4),
+        'hydrophobicity': round(hydrophobicity, 4),
+        'helix': round(helix, 4),
+        'sheet': round(sheet, 4)
+    }

@@ -18,8 +18,6 @@ class PredictionForm(Form):
                                        widget=forms.NumberInput(attrs={'class': 'form-control', 'step': 'any'}))
     calculated_pi = forms.DecimalField(decimal_places=2, max_digits=12,
                                        widget=forms.NumberInput(attrs={'class': 'form-control', 'step': 'any'}))
-    sequence_length = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control'}))
-    sequence_mass = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control'}))
     gene_product_type = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=False)
     gene_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     cell_location = forms.CharField(required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))

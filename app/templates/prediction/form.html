@@ -119,14 +119,6 @@
                         <label for="selected_model" class="form-label">Calculate PI</label>
                         {{ form.calculated_pi }}
                     </div>
-                    <div class="col-md-4 col-sm-12 my-2">
-                        <label for="selected_model" class="form-label">Sequence Length</label>
-                        {{ form.sequence_length }}
-                    </div>
-                    <div class="col-md-4 col-sm-12 my-2">
-                        <label for="selected_model" class="form-label">Sequence Mass</label>
-                        {{ form.sequence_mass }}
-                    </div>
                     <div class="col-12 my-2">
                         <label for="selected_model" class="form-label">Amino Acid Sequence</label>
                         {{ form.amino_acid_sequence }}
@@ -159,22 +151,76 @@
                 <div class="col-12 my-2">
                         <div class="px-4 py-5 my-5 text-center">
                                 {% if protein %}
-                                    <h1 class="display-5 fw-bold">Predicted Properties</h1>
-                                <div class="col-lg-6 mx-auto">
-                                <table class="table table-borderless">
-                                  <thead>
-                                    <tr>
-                                      <th scope="col">Property</th>
-                                        <th scope="col">Prediction</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    <tr>
-                                      <td>Solubility</td>
-                                      <td>{{ protein.solubility }}</td>
-                                    </tr>
-                                  </tbody>
-                                </table>
+                                    <div class="row mb-5">
+                                        <h1 class="display-5 fw-bold">Protein Information</h1>
+                                        <div class="col-12 mx-auto mt-2">
+                                            <div class="row text-start">
+                                                <div class="col-md-3 col-sm-12 my-2">
+                                                    <strong>Gene Name</strong>: {{ protein.gene_name|default:"Unknown" }}
+                                                </div>
+                                                <div class="col-md-3 col-sm-12 my-2">
+                                                    <strong>Organism</strong>: {{ protein.organism|default:"Unknown" }}
+                                                </div>
+                                                <div class="col-md-3 col-sm-12 my-2">
+                                                    <strong>Cell Location</strong>: {{ protein.cell_location|default:"Unknown" }}
+                                                </div>
+                                                <div class="col-md-3 col-sm-12  my-2">
+                                                    <strong>Gene Product Type</strong>: {{ protein.gene_product_type|default:"Unknown" }}
+                                                </div>
+                                                <div class="col-md-3 col-sm-12  my-2">
+                                                    <strong>Yield (uM)</strong>: {{ protein.yield_um|default:"Unknown" }}
+                                                </div>
+                                                <div class="col-md-3 col-sm-12  my-2">
+                                                    <strong>Yield (mL)</strong>: {{ protein.yield_ml|default:"Unknown" }}
+                                                </div>
+                                                <div class="col-md-3 col-sm-12  my-2">
+                                                    <strong>Sequence Length</strong>: {{ protein.sequence_length|default:"Unknown" }}
+                                                </div>
+                                                <div class="col-md-3 col-sm-12  my-2">
+                                                    <strong>Sequence Mass</strong>: {{ protein.sequence_mass|default:"Unknown" }}
+                                                </div>
+                                                <div class="col-12  my-2">
+                                                    <strong>Amino Acid Sequence</strong>: {{ protein.amino_acid_sequence|default:"Unknown" }}
+                                                </div>
+                                                <div class="col-md-3 col-sm-12  my-2">
+                                                    <strong>Steric Parameters</strong>: {{ protein.steric_parameter|default:"Unknown" }}
+                                                </div>
+                                                <div class="col-md-3 col-sm-12  my-2">
+                                                    <strong>Polarizability</strong>: {{ protein.polarizability|default:"Unknown" }}
+                                                </div>
+                                                <div class="col-md-3 col-sm-12  my-2">
+                                                    <strong>Volume</strong>: {{ protein.volume|default:"Unknown" }}
+                                                </div>
+                                                <div class="col-md-3 col-sm-12  my-2">
+                                                    <strong>Hydrophobicity</strong>: {{ protein.hydrophobicity|default:"Unknown" }}
+                                                </div>
+                                                <div class="col-md-3 col-sm-12  my-2">
+                                                    <strong>Helix Probability</strong>: {{ protein.helix_probability|default:"Unknown" }}
+                                                </div>
+                                                <div class="col-md-3 col-sm-12  my-2">
+                                                    <strong>Sheet Probability</strong>: {{ protein.sheet_probability|default:"Unknown" }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <h1 class="display-5 fw-bold">Predicted Properties</h1>
+                                        <div class="col-12 mx-auto">
+                                            <table class="table table-borderless">
+                                              <thead>
+                                                <tr>
+                                                  <th scope="col">Property</th>
+                                                    <th scope="col">Prediction</th>
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+                                                <tr>
+                                                  <td>Solubility</td>
+                                                  <td>{{ protein.solubility }}</td>
+                                                </tr>
+                                              </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 {% else %}
                                 <h1 class="display-5 fw-bold">No Predictions</h1>

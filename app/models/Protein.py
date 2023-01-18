@@ -21,6 +21,14 @@ class Protein(models.Model):
     amino_acid_sequence = models.TextField()
     organism = models.TextField(null=True)
 
+    # AAPHY7
+    steric_parameter = models.DecimalField(decimal_places=6, max_digits=12)
+    polarizability = models.DecimalField(decimal_places=6, max_digits=12)
+    volume = models.DecimalField(decimal_places=6, max_digits=12)
+    hydrophobicity = models.DecimalField(decimal_places=6, max_digits=12)
+    helix_probability = models.DecimalField(decimal_places=6, max_digits=12)
+    sheet_probability = models.DecimalField(decimal_places=6, max_digits=12)
+
     def to_dict(self):
         return {
             'yield(uM)': float(self.yield_um),
