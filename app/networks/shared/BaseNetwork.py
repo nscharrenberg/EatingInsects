@@ -8,7 +8,7 @@ from app.networks.utils.processing_utils import ProcessingUtils
 class BaseNetwork:
     def __init__(self, predictor: Predictor):
         self.results = None
-        self.location = 'networks/{}.h5'.format(predictor.slug)
+        self.location = 'resources/public/networks/{}.h5'.format(predictor.slug)
         self.predictor = predictor
         self.compiled = False
         self.model = None
