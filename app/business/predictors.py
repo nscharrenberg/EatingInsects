@@ -2,7 +2,7 @@ import pandas as pd
 
 from app.forms.config_model_form import ConfigModelForm
 from app.forms.create_network_form import CreateNetworkForm
-from app.models import Predictor, Protein, ModelType
+from app.models import Predictor, Protein, ModelType, PredictionType
 from app.models.Dataset import Dataset
 from app.models.PredictionStatus import PredictionStatus
 from app.networks.SNN.snn import SNN
@@ -24,7 +24,7 @@ def get_by_id(id):
     return Predictor.objects.get(id=id)
 
 
-def get_by_amino_acid_and_predictor(predictor: Predictor, sequence: str) -> Protein|None:
+def get_by_amino_acid_and_predictor(predictor: Predictor, sequence: str) -> Protein | None:
     try:
         return Protein.objects.get(predictor=predictor, amino_acid_sequence=sequence)
     except Exception:
@@ -254,3 +254,8 @@ def extract_amino_acid_features(sequence: str):
         'helix': round(helix, 4),
         'sheet': round(sheet, 4),
     }
+
+
+def get_prediction_type_by_key(given_key: str):
+    mapping = {key: value for key, value in PredictionType.choices}
+    return mapping[given_key]

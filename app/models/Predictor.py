@@ -27,3 +27,6 @@ class Predictor(models.Model):
 
     def __str__(self):
         return '{}-{}'.format(self.slug, self.status)
+
+    def get_prediction_type_label(self):
+        return

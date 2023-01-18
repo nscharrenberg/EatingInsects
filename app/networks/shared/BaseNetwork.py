@@ -1,6 +1,7 @@
 from django.core.files.storage import default_storage
 from tensorflow import keras
 
+from app.business import predictors
 from app.models import Predictor, Protein
 from app.networks.utils.processing_utils import ProcessingUtils
 
@@ -12,7 +13,7 @@ class BaseNetwork:
         self.predictor = predictor
         self.compiled = False
         self.model = None
-        X, y = ProcessingUtils.load_dataset(predictor.dataset)
+        X, y = ProcessingUtils.load_dataset(predictor.dataset, predictors.get_prediction_type_by_key(predictor.prediction_type))
         self.dataset_train, self.dataset_test = ProcessingUtils.load_train_and_test_sets(X, y, predictor)
         self.train_labels = None
         self.test_features = None
@@ -33,8 +34,8 @@ class BaseNetwork:
 
         self.train_features = self.dataset_train.copy()
         self.test_features = self.dataset_test.copy()
-        self.train_labels = self.train_features.pop('Solubility(%)')
-        self.test_labels = self.test_features.pop('Solubility(%)')
+        self.train_labels = self.train_features.pop(predictors.get_prediction_type_by_key(self.predictor.prediction_type))
+        self.test_labels = self.test_features.pop(predictors.get_prediction_type_by_key(self.predictor.prediction_type))
 
     def compile(self):
         raise Exception("Model has not yet been implemented.")
