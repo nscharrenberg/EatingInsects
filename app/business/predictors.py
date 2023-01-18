@@ -1,6 +1,6 @@
 from app.forms.config_model_form import ConfigModelForm
 from app.forms.create_network_form import CreateNetworkForm
-from app.models import Predictor, Protein
+from app.models import Predictor, Protein, ModelType
 from app.models.Dataset import Dataset
 from app.models.PredictionStatus import PredictionStatus
 from app.networks.SNN.snn import SNN
@@ -161,5 +161,5 @@ def is_model_exists(model_type: str, prediction_type: str, version: str) -> bool
 
 
 def load_network(predictor: Predictor):
-    if predictor.model_type == 'SNN':
+    if predictor.model_type == ModelType.SNN.value:
         return SNN(predictor)
