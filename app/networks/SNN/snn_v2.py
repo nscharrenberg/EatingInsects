@@ -19,13 +19,10 @@ class SNN2(BaseNetwork):
         ])
 
         self.model.compile(
-            loss='mean_absolute_error',
+            loss=keras.metrics.RootMeanSquaredError(name="RMSE"),
             optimizer=keras.optimizers.Adam(float(self.predictor.learning_rate)),
             metrics=[
-                keras.metrics.MeanSquaredError(name="MSE"),
-                keras.metrics.MeanAbsoluteError(name="MAE"),
-                keras.metrics.RootMeanSquaredError(name="RMSE"),
-                keras.metrics.MeanSquaredLogarithmicError(name='MSLE')
+                keras.metrics.MeanAbsoluteError(name="MAE")
             ]
         )
 

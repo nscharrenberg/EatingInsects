@@ -7,6 +7,8 @@ from app.models.Dataset import Dataset
 from app.models.PredictionStatus import PredictionStatus
 from app.networks.SNN.snn import SNN
 from app.networks.SNN.snn_v2 import SNN2
+from app.networks.DT.DT import DT
+from app.networks.DT.DT import DT
 from app.networks.utils.processing_utils import ProcessingUtils
 
 
@@ -26,7 +28,7 @@ def get_by_id(id):
     return Predictor.objects.get(id=id)
 
 
-def get_by_amino_acid_and_predictor(predictor: Predictor, sequence: str) -> Protein | None:
+def get_by_amino_acid_and_predictor(predictor: Predictor, sequence: str):
     try:
         return Protein.objects.get(predictor=predictor, amino_acid_sequence=sequence)
     except Exception:
@@ -151,8 +153,8 @@ def test(slug: str) -> Predictor:
     network = load_network(model)
     results = network.test()
 
-    model.rmse = results[3]
-    model.mae = results[2]
+    model.rmse = results[0]
+    model.mae = results[1]
 
     model.status = PredictionStatus.TESTED.value
     model.save()
@@ -191,6 +193,8 @@ def load_network(predictor: Predictor):
         return SNN(predictor)
     if predictor.model_type == ModelType.SNN2.value:
         return SNN2(predictor)
+    if predictor.model_type == ModelType.DT.value:
+        return DT(predictor)
 
 
 def extract_data_from_amino_acids(sequence: str):
