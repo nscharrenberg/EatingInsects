@@ -1,7 +1,7 @@
 <br/>
 <p align="center">
   <a href="https://github.com/nscharrenberg/EatingInsects">
-    <img src="https://sibo.tech/wp-content/uploads/2022/03/Sibo-logo-blueColor-rgb-600.png" alt="Logo" width="80" height="80">
+    <img src="https://sibo.tech/wp-content/uploads/2022/03/Sibo-logo-blueColor-rgb-600.png" alt="Logo" width="150">
   </a>
 
   <h3 align="center">Protein Property Prediction</h3>
