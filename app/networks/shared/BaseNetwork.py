@@ -10,7 +10,9 @@ import tensorflow as tf
 
 class BaseNetwork:
     def __init__(self, predictor: Predictor):
-        tf.random.set_seed(float(predictor.seed))
+        tf.random.set_seed(int(predictor.seed))
+        tf.keras.utils.set_random_seed(int(predictor.seed))
+        tf.config.experimental.enable_op_determinism()
 
         self.results = None
         self.location = 'resources/public/networks/{}.h5'.format(predictor.slug)

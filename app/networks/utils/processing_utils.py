@@ -5,26 +5,37 @@ from app.models import Predictor
 from app.models.Dataset import Dataset
 from sklearn.model_selection import train_test_split
 
+
 class ProcessingUtils:
+    @staticmethod
+    def get_expected_dataset_columns():
+        return [
+            'yield_um',
+            'yield_ml',
+            'calculated_mw',
+            'calculated_pi',
+            'sequence_length',
+            'sequence_mass',
+            'steric',
+            'polarizability',
+            'volume',
+            'hydrophobicity',
+            'helix',
+            'sheet'
+        ]
+
+    @staticmethod
+    def get_expected_dataset_prediction_columns():
+        return [
+            'solubility'
+        ]
+
     @staticmethod
     def load_dataset(dataset: Dataset, prediction_property_key: str):
         raw_data = pd.read_csv(dataset.location.path)
         data = raw_data.copy()
         X = data[
-            [
-                'Yield(uM)',
-                'Yield(ug/ml)',
-                'Calculated MW(kDa)',
-                'Calculated pI',
-                'Sequence length',
-                'Sequence mass',
-                'Steric parameter',
-                'Polarizability',
-                'Volume',
-                'Hydrophobicity',
-                'Helix probability',
-                'Sheet probability'
-            ]
+            ProcessingUtils.get_expected_dataset_columns()
         ]
         y = data[[prediction_property_key]]
 
@@ -39,7 +50,8 @@ class ProcessingUtils:
         sample_set = X.copy()
         sample_set[prediction_property_key] = y[prediction_property_key]
 
-        sample_set = sample_set[[prediction_property_key] + [col for col in sample_set.columns if col != prediction_property_key]]
+        sample_set = sample_set[
+            [prediction_property_key] + [col for col in sample_set.columns if col != prediction_property_key]]
         train_split = 1.0 - float(model.split)
         seed = int(model.seed)
         train_dataset = sample_set.sample(frac=train_split, random_state=seed)
@@ -66,8 +78,6 @@ class ProcessingUtils:
             [prediction_property_key] + [col for col in test_set.columns if col != prediction_property_key]]
 
         return training_set, test_set
-
-
 
     @staticmethod
     def normalize(col_data):

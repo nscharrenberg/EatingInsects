@@ -9,10 +9,10 @@ class SNN2(BaseNetwork):
             raise Exception("Model has already been compiled")
 
         self.model = keras.Sequential([
+            keras.layers.Dense(512, activation='relu'),
+            keras.layers.Dense(256, activation='relu'),
             keras.layers.Dense(128, activation='relu'),
-            keras.layers.Dense(56, activation='relu'),
             keras.layers.Dense(64, activation='relu'),
-            keras.layers.Dense(32, activation='relu'),
             keras.layers.Dense(16, activation='relu'),
             keras.layers.Dense(8, activation='relu'),
             keras.layers.Dense(1)
