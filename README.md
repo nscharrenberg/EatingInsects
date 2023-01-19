@@ -218,6 +218,23 @@ As we're working with datasets and models that can be uploaded and created, we'v
 
 Personal data is not stored in any of the databases and as we're working with proteins, should not be included in the datasets either.
 
+## Future Work
+### Application Specific
+- Dynamic Datasts and protein fields
+- Dynamic machine learning model parameter fields
+- Calculate PI and MW from amino acid sequence
+- Compare model evaluations side-by-side or in visualized graphs
+
+### Research Specific
+- Synthetic data generation or manually retrieve more data
+- Predict different kinds of protein properties (instead of just solubility)
+- Protein Alignments and Similarities based on predicted property values (and maybe amino acid sequence)
+- Distinguish between beneficial and harmful proteins for recommendation
+
+### Machine Learning Models
+- Graph Machine Learning (GraphSol)
+- Ensemble Learning Model
+
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
