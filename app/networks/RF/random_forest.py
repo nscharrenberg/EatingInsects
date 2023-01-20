@@ -3,6 +3,7 @@ from sklearn import metrics
 from app.networks.shared.BaseNetwork import BaseNetwork
 
 
+
 class RF(BaseNetwork):
     def compile(self):
         if self.model:

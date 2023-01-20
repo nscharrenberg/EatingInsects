@@ -1,18 +1,16 @@
-from tensorflow import keras
 import pandas as pd
-import tensorflow as tf
-from sklearn.linear_model import LinearRegression
+from tensorflow import keras, sqrt
+#from sklearn.linear_model import LinearRegression
 from app.networks.shared.BaseNetwork import BaseNetwork
 from sklearn import metrics
-from tensorflow.keras import layers
+import matplotlib as plt
 
 
-
+import tensorflow as tf
 
 class RF(BaseNetwork):
 
     # Construct the keras sequential model used for the activation function (ReLu)
-
     def compile(self):
         if self.model:
             raise Exception("Model has already been compiled")
@@ -36,9 +34,6 @@ class RF(BaseNetwork):
             optimizer=tf.keras.optimizers.Adam(float(self.predictor.learning_rate)),
 
         )
-
-
-
         return self.model
 
     def train(self):
@@ -54,17 +49,40 @@ class RF(BaseNetwork):
 
         )
 
+        # Represent the model in a histogram diagram.
         hist = pd.DataFrame(trained_model.trained_model)
         hist['epoch'] = trained_model.epoch
         hist.tail()
 
+        plt.plot(trained_model.trained_model['loss'], label='loss')
+        plt.plot(trained_model.trained_model['val_loss'], label='val_loss')
+        plt.ylim([0, 10])
+        plt.xlabel('Epoch')
+        plt.ylabel('Error [MPG]')
+        plt.legend()
+        plt.grid(True)
 
-
-
+    # Collect the test results
     def test(self):
-        predictions = self.model.predict(self.test_features)
         self.results = []
-        self.results.append(sqrt(metrics.mean_squared_error(self.test_labels, predictions)))
-        self.results.append(metrics.mean_absolute_error(self.test_labels, predictions))
+        results = self.results
+        results[self.model] = self.model.evaluate(
+            self.test_features,
+            self.test_labels, verbose=0
+        )
+
+         # Predict the features
+        predictions = self.model.predict(self.test_features)
+        results.append(sqrt(metrics.mean_squared_error(self.test_labels, predictions)))
+        results.append(metrics.mean_absolute_error(self.test_labels, predictions))
 
         return self.results
+
+     # def plot_model(x,y):
+     #     x = tf.linspace(0.0, 250, 251)
+     #     plt.scatter(test(train_features), self.train_labels, label='Data')
+     #     plt.plot(x, y, color='k', label='Predictions')
+     #     plt.xlabel('Data labels')
+     #     plt.ylabel('MPG')
+     #     plt.legend()
+
