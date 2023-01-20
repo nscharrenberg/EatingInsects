@@ -15,10 +15,10 @@ class SNN(BaseNetwork):
         ])
 
         self.model.compile(
-            loss=keras.metrics.mean_squared_error,
+            loss=keras.metrics.mean_absolute_error,
             optimizer=keras.optimizers.Adam(float(self.predictor.learning_rate)),
             metrics=[
-                keras.metrics.MeanAbsoluteError(name="MAE")
+                keras.metrics.RootMeanSquaredError(name="RMSE")
             ]
         )
 

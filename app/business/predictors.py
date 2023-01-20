@@ -154,8 +154,8 @@ def test(slug: str) -> Predictor:
     network = load_network(model)
     results = network.test()
 
-    model.rmse = results[0]
-    model.mae = results[1]
+    model.rmse = results[1]
+    model.mae = results[0]
 
     model.status = PredictionStatus.TESTED.value
     model.save()

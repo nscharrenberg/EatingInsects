@@ -23,7 +23,7 @@ class DT(BaseNetwork):
     def test(self):
         predictions = self.model.predict(self.test_features)
         self.results = []
-        self.results.append(sqrt(metrics.mean_squared_error(self.test_labels, predictions)))
         self.results.append(metrics.mean_absolute_error(self.test_labels, predictions))
+        self.results.append(sqrt(metrics.mean_squared_error(self.test_labels, predictions)))
 
         return self.results
