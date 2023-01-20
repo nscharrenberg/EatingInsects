@@ -10,6 +10,7 @@ from app.networks.SNN.snn_v2 import SNN2
 from app.networks.DT.DT import DT
 from app.networks.DT.DT import DT
 from app.networks.RF.random_forest import RF
+from app.networks.LR.Linear_Regression import LR
 from app.networks.utils.processing_utils import ProcessingUtils
 
 
@@ -198,6 +199,8 @@ def load_network(predictor: Predictor):
         return DT(predictor)
     if predictor.model_type == ModelType.RF.value:
         return RF(predictor)
+    if predictor.model_type == ModelType.LR.value:
+        return LR(predictor)
 
 
 def extract_data_from_amino_acids(sequence: str):

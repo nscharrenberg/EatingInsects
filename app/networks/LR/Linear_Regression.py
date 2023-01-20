@@ -8,7 +8,7 @@ import matplotlib as plt
 
 import tensorflow as tf
 
-class RF(BaseNetwork):
+class LR(BaseNetwork):
 
     # Construct the keras sequential model used for the activation function (ReLu)
     def compile(self):
