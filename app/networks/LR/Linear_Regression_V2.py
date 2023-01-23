@@ -23,15 +23,12 @@ class LRV2(BaseNetwork):
     # Collect the test results
     def test(self):
         self.results = []
-        results = self.results
-        results[self.model] = self.model.evaluate(
-            self.test_features,
-            self.test_labels, verbose=0
-        )
+        #results = self.results
+        #results[self.model]
+        results = self.model.evaluate(self.test_features,self.test_labels, verbose=0)
         # Predict the features
         predictions = self.model.predict(self.test_features)
         results.append(sqrt(metrics.mean_squared_error(self.test_labels, predictions)))
         results.append(metrics.mean_absolute_error(self.test_labels, predictions))
-
 
         return self.results

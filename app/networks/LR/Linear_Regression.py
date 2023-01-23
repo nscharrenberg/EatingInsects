@@ -1,11 +1,6 @@
-import pandas as pd
 from tensorflow import keras, sqrt
-from sklearn.linear_model import LinearRegression
 from app.networks.shared.BaseNetwork import BaseNetwork
 from sklearn import metrics
-import matplotlib as plt
-
-
 import tensorflow as tf
 
 class LR(BaseNetwork):
@@ -52,17 +47,12 @@ class LR(BaseNetwork):
 
     # Collect the test results
     def test(self):
-        self.results= []
-        results = self.results
-        results[self.model] = self.model.evaluate(
-            self.test_features,
-            self.test_labels, verbose=0
-        )
+        results = self.model.evaluate(self.test_features, self.test_labels, verbose=0)
 
         # Evaluate the model
-        score = self.model.evaluate(self.test_features, self.test_labels, verbose=0)
-        print('Test loss', score[0])
-        print('Test accuracy', score[1])
+        #score = self.model.evaluate(self.test_features, self.test_labels, verbose=0)
+        print('Test loss', results[0])
+        print('Test accuracy', results[1])
 
         # Predict the features
         predictions = self.model.predict(self.test_features)
