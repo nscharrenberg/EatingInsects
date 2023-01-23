@@ -33,38 +33,50 @@ class LR(BaseNetwork):
             metrics=['accuracy']
 
         )
-
         return self.model
 
     def train(self):
         self.model.fit(
-             self.train_features,
-             self.train_labels,
-    #         # Define the bacth size.
-    #         batch_size=128,
-    #         # Define the epochs on which the model is executed
-    #         epochs=200,
-    #         # Suppress all logging
-    #         verbose=0,
-    #         # Compute the validation of the results on X% of the training data.
-    #         validation_data=
-    #         # validation_split= X.
+            self.train_features,
+            self.train_labels,
+            # Define the bacth size.
+            batch_size=128,
+            # Define the epochs on which the model is executed
+            epochs=200,
+            # Suppress all logging
+            verbose=0,
+            # Compute the validation of the results on X% of the training data.
+            # validation_data=
         )
+        self.model.summary()
 
     # Collect the test results
     def test(self):
-        self.results = []
+        self.results= []
         results = self.results
         results[self.model] = self.model.evaluate(
             self.test_features,
             self.test_labels, verbose=0
         )
-         # Predict the features
+
+        # Evaluate the model
+        score = self.model.evaluate(self.test_features, self.test_labels, verbose=0)
+        print('Test loss', score[0])
+        print('Test accuracy', score[1])
+
+        # Predict the features
         predictions = self.model.predict(self.test_features)
+        print(predictions)
+
         results.append(sqrt(metrics.mean_squared_error(self.test_labels, predictions)))
         results.append(metrics.mean_absolute_error(self.test_labels, predictions))
 
         return self.results
+
+
+
+
+
 
 
 
