@@ -36,22 +36,7 @@ class LR(BaseNetwork):
 
         return self.model
 
-    # def train(self):
-    #     trained_model = self.model.fit(
-    #         self.train_features,
-    #         self.train_labels,
-    #         # Define the bacth size.
-    #         batch_size=128,
-    #         # Define the epochs on which the model is executed
-    #         epochs=200,
-    #         # Suppress all logging
-    #         verbose=0,
-    #         # Compute the validation of the results on X% of the training data.
-    #         validation_data=
-    #         # validation_split= X.X
-    #
-    #
-    #     )
+
 
     # Collect the test results
     def test(self):
