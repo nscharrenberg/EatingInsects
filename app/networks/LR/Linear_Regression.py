@@ -30,13 +30,26 @@ class LR(BaseNetwork):
             # Compile the loss and the optimizer arguments
             loss=tf.keras.metrics.MeanAbsoluteError(name='MAE'),
             optimizer=tf.keras.optimizers.Adam(float(self.predictor.learning_rate)),
-            metrics = ['accuracy']
+            metrics=['accuracy']
 
         )
 
         return self.model
 
-
+    def train(self):
+        self.model.fit(
+             self.train_features,
+             self.train_labels,
+    #         # Define the bacth size.
+    #         batch_size=128,
+    #         # Define the epochs on which the model is executed
+    #         epochs=200,
+    #         # Suppress all logging
+    #         verbose=0,
+    #         # Compute the validation of the results on X% of the training data.
+    #         validation_data=
+    #         # validation_split= X.
+        )
 
     # Collect the test results
     def test(self):
