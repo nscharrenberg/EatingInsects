@@ -11,7 +11,7 @@ class LRV2(BaseNetwork):
             raise Exception("Model has already been compiled")
         regression = LinearRegression()
         #self.model = regression.fit(self.train_features, self.train_labels,sample_weight=None)
-        self.model = LinearRegression(self.train())
+        self.model = regression(self.train())
 
         return self.model
 
