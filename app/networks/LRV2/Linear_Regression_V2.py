@@ -9,9 +9,8 @@ class LRV2(BaseNetwork):
     def compile(self):
         if self.model:
             raise Exception("Model has already been compiled")
-        regression = LinearRegression()
-        #self.model = regression.fit(self.train_features, self.train_labels,sample_weight=None)
-        self.model = regression(self.train())
+
+        self.model = LinearRegression()
 
         return self.model
 
@@ -24,8 +23,7 @@ class LRV2(BaseNetwork):
     # Collect the test results
     def test(self):
         self.results = []
-        #results = self.results
-        #results[self.model]
+
         results = self.model.evaluate(self.test_features,self.test_labels, verbose=0)
         # Predict the features
         predictions = self.model.predict(self.test_features)
