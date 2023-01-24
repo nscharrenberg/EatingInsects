@@ -28,14 +28,6 @@ class LR(BaseNetwork):
         self.model.fit(
             self.train_features,
             self.train_labels,
-            # Define the batch size.
-            batch_size=128,
-            # Define the epochs on which the model is executed
-            epochs=200,
-            # Suppress all logging
-            verbose=0,
-            # Compute the validation of the results on X% of the training data.
-            # validation_data=
         )
         self.model.summary()
 
