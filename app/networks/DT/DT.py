@@ -10,7 +10,7 @@ class DT(BaseNetwork):
         if self.model:
             raise Exception("Model has already been compiled")
 
-        self.model = DecisionTreeRegressor(random_state=0, min_samples_leaf=15)
+        self.model = DecisionTreeRegressor(random_state=int(self.predictor.seed), max_depth=5,min_samples_split=122, min_samples_leaf=42)
 
         return self.model
 
