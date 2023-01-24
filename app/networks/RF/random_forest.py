@@ -1,5 +1,4 @@
 from math import sqrt
-
 from sklearn.ensemble import RandomForestRegressor
 from sklearn import metrics
 from app.networks.shared.BaseNetwork import BaseNetwork
@@ -10,7 +9,7 @@ class RF(BaseNetwork):
         if self.model:
             raise Exception("Model has already been compiled")
 
-        self.model = RandomForestRegressor(n_estimators=100, random_state=0)
+        self.model = RandomForestRegressor(n_estimators=520, random_state=int(self.predictor.seed))
         return self.model
 
     def train(self):
