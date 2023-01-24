@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView, FormView
+from django.views.generic import FormView
 
 from app.business import predictors
 from app.forms.prediction_form import PredictionForm
