@@ -3,3 +3,6 @@ from .delete_model_view import DeleteModelView
 from .models_overview_view import ModelsOverviewView
 from .prediction_view import PredictionView
 from .update_model_view import UpdateModelView
+from .create_ensemble_view import CreateEnsembleView
+from .ensemble_overview_view import EnsembleOverviewView
+from .ensembe_prediction_view import EnsemblePredictionView

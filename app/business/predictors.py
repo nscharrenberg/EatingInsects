@@ -5,12 +5,10 @@ from app.forms.create_network_form import CreateNetworkForm
 from app.models import Predictor, Protein, ModelType, PredictionType
 from app.models.Dataset import Dataset
 from app.models.PredictionStatus import PredictionStatus
-from app.networks.SNN.snn import SNN
-from app.networks.SNN.snn_v2 import SNN2
-from app.networks.DT.DT import DT
 from app.networks.DT.DT import DT
 from app.networks.RF.random_forest import RF
-from app.networks.utils.processing_utils import ProcessingUtils
+from app.networks.SNN.snn import SNN
+from app.networks.SNN.snn_v2 import SNN2
 
 
 def get_all():
@@ -37,8 +35,14 @@ def get_by_amino_acid_and_predictor(predictor: Predictor, sequence: str):
 
 
 def predict(form) -> Protein:
-    amino_acid_sequence = form['amino_acid_sequence'].value()
-    model = get_by_id(form['selected_model'].value())
+    cleaned_data = form.cleaned_data
+    amino_acid_sequence = cleaned_data['amino_acid_sequence']
+    form_model = cleaned_data['selected_model']
+
+    if not form_model:
+        raise Exception("A Model must be selected")
+
+    model = get_by_id(form_model.id)
 
     found_protein = get_by_amino_acid_and_predictor(model, amino_acid_sequence)
 
@@ -48,17 +52,17 @@ def predict(form) -> Protein:
     amino_acid_features = extract_amino_acid_features(amino_acid_sequence)
 
     # TODO: CHeck if Protein is already predicted
-    protein = Protein(yield_ml=form['yield_ml'].value(),
-                      yield_um=form['yield_um'].value(),
-                      calculated_mw=form['calculated_mw'].value(),
-                      calculated_pi=form['calculated_pi'].value(),
+    protein = Protein(yield_ml=cleaned_data['yield_ml'],
+                      yield_um=cleaned_data['yield_um'],
+                      calculated_mw=cleaned_data['calculated_mw'],
+                      calculated_pi=cleaned_data['calculated_pi'],
                       sequence_length=amino_acid_features['sequence_length'],
                       sequence_mass=amino_acid_features['sequence_mass'],
-                      gene_product_type=form['gene_product_type'].value(),
-                      gene_name=form['gene_name'].value(),
-                      cell_location=form['cell_location'].value(),
+                      gene_product_type=cleaned_data['gene_product_type'],
+                      gene_name=cleaned_data['gene_name'],
+                      cell_location=cleaned_data['cell_location'],
                       amino_acid_sequence=amino_acid_sequence,
-                      organism=form['organism'].value(),
+                      organism=cleaned_data['organism'],
                       steric_parameter=amino_acid_features['steric'],
                       polarizability=amino_acid_features['polarizability'],
                       volume=amino_acid_features['volume'],
@@ -70,7 +74,10 @@ def predict(form) -> Protein:
     network = load_network(model)
     predictions = network.predict(protein)
 
-    protein.solubility = round(float(predictions[0][0]), 4)
+    try:
+        protein.solubility = round(float(predictions[0][0]), 4)
+    except Exception:
+        protein.solubility = round(float(predictions[0]), 4)
     protein.save()
 
     return protein
