@@ -3,8 +3,8 @@ from app.networks.shared.BaseNetwork import BaseNetwork
 from sklearn import metrics
 import tensorflow as tf
 
-class LR(BaseNetwork):
 
+class LR(BaseNetwork):
     # Construct the keras sequential model used for the activation function (ReLu)
     def compile(self):
         if self.model:
@@ -14,12 +14,6 @@ class LR(BaseNetwork):
         self.model = tf.keras.Sequential([
             keras.layers.Dense(1, activation='linear')
         ])
-
-        # Adapt the model to be trained WITHOUT normalization
-        #self.model = tf.keras.layers.(self.model)
-
-        #self.model = LinearRegression().fit(X,y,sample_weight=None)
-        #return self.model
 
         # Compile the model
         self.model.compile(
@@ -50,7 +44,7 @@ class LR(BaseNetwork):
         results = self.model.evaluate(self.test_features, self.test_labels, verbose=0)
 
         # Evaluate the model
-        #score = self.model.evaluate(self.test_features, self.test_labels, verbose=0)
+        # score = self.model.evaluate(self.test_features, self.test_labels, verbose=0)
         print('Test loss', results[0])
         print('Test accuracy', results[1])
 
@@ -62,14 +56,3 @@ class LR(BaseNetwork):
         results.append(metrics.mean_absolute_error(self.test_labels, predictions))
 
         return self.results
-
-
-
-
-
-
-
-
-
-
-
