@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Protein Property Predictor - Models</title>
+    <title>Protein Property Predictor - Ensembles</title>
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <style>
@@ -47,10 +47,10 @@
               <a class="nav-link" href="{% url 'make_prediction' %}">Search Engine</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="{% url 'all_model' %}">Model Builder</a>
+              <a class="nav-link" href="{% url 'all_model' %}">Model Builder</a>
             </li>
               <li class="nav-item">
-              <a class="nav-link" href="{% url 'all_ensemble' %}">Ensembler</a>
+              <a class="nav-link active" aria-current="page" href="{% url 'all_ensemble' %}">Ensembler</a>
             </li>
           </ul>
         </div>
@@ -95,32 +95,27 @@
         </div>
         <div class="my-3 p-3 bg-body rounded shadow-sm">
             <div class="d-flex justify-content-between border-bottom pb-2 mb-0 ">
-              <h3>Build a Model</h3>
-              <a href="{% url 'all_model' %}" class="btn btn-outline-primary">
-                <i class="bi bi-arrow-left-circle flex-shrink-0 me-2"></i> Back to Models</a>
+              <h3>Build an Ensemble Model</h3>
+              <a href="{% url 'all_ensemble' %}" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-left-circle flex-shrink-0 me-2"></i> Back to Ensembles</a>
             </div>
 
-            <form action="{% url 'create_model' %}" method="post">
+            <form action="{% url 'create_ensemble' %}" method="post">
                 {% csrf_token %}
 
                 <div class="row">
                     <div class="col-12 my-2">
-                        <label for="selected_model" class="form-label">What model do you want to use?</label>
-                        {{ form.selected_model }}
+                        <label for="version" class="form-label">Name</label>
+                        {{ form.name }}
                     </div>
 
                     <div class="col-12 my-2">
-                        <label for="selected_prediction_type" class="form-label">What do you want to predict?</label>
-                        {{ form.selected_prediction_type }}
+                        <label for="selected_model" class="form-label">What models should be used?</label>
+                        {{ form.selected_models }}
                     </div>
 
                     <div class="col-12 my-2">
-                        <label for="version" class="form-label">Version (Optional)</label>
-                        {{ form.version }}
-                    </div>
-
-                    <div class="col-12 my-2">
-                        <button type="submit" class="btn btn-primary">Create Model</button>
+                        <button type="submit" class="btn btn-primary">Create Ensemble Model</button>
                     </div>
                 </div>
             </form>
