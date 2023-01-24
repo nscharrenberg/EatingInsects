@@ -7,4 +7,5 @@ class ModelType(models.TextChoices):
     RF = 'RF', 'Random Forests'
     DT = "DT", 'Decision Tree'
     LR = 'LR', 'Linear Regression'
+    LRV2 = 'LRV2', 'Linear Regression Version 2'
 
