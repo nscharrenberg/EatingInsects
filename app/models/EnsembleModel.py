@@ -7,6 +7,7 @@ class EnsembleModel(models.Model):
     name = models.TextField()
     predictors = models.ManyToManyField(Predictor)
     created_at = models.DateTimeField(auto_now_add=True)
+    ensembleStyle = ''
 
     class Meta:
         ordering = ['name']
