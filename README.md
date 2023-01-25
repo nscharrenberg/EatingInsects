@@ -13,7 +13,7 @@
     <a href="https://github.com/nscharrenberg/EatingInsects"><strong>Explore the docs »</strong></a>
     <br/>
     <br/>
-    <a href="https://github.com/nscharrenberg/EatingInsects">View Demo</a>
+    <a href="https://github.com/nscharrenberg/EatingInsects/wiki">Wiki</a>
     .
     <a href="https://github.com/nscharrenberg/EatingInsects/issues">Report Bug</a>
     .
