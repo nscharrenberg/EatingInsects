@@ -75,6 +75,4 @@ def predict(form):
     avg = sum_val / len(predictions)
     avg = round(float(avg), 2)
 
-    wavg =
-
     return avg, predictions
