@@ -1,5 +1,4 @@
 from tensorflow import keras
-
 from app.networks.shared.BaseNetwork import BaseNetwork
 
 
