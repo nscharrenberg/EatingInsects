@@ -2,18 +2,13 @@ from tensorflow import keras
 from app.networks.shared.BaseNetwork import BaseNetwork
 
 
-class SNN2(BaseNetwork):
+class LR(BaseNetwork):
     def compile(self):
         if self.model:
             raise Exception("Model has already been compiled")
 
+        # Create the keras sequential neural network model consisting of only one layer.
         self.model = keras.Sequential([
-            keras.layers.Dense(512, activation='relu'),
-            keras.layers.Dense(256, activation='relu'),
-            keras.layers.Dense(128, activation='relu'),
-            keras.layers.Dense(64, activation='relu'),
-            keras.layers.Dense(16, activation='relu'),
-            keras.layers.Dense(8, activation='relu'),
             keras.layers.Dense(1)
         ])
 
