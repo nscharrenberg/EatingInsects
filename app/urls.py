@@ -9,4 +9,8 @@ urlpatterns = [
     path('models', views.ModelsOverviewView.as_view(), name='all_model'),
     path('', views.PredictionView.as_view(), name="make_prediction"),
     path('experiments', views.ExperimentsView.as_view(), name="experiments")
+    path('', views.PredictionView.as_view(), name="make_prediction"),
+    path('ensembles', views.EnsembleOverviewView.as_view(), name='all_ensemble'),
+    path('ensembles/predict', views.EnsemblePredictionView.as_view(), name='predict_ensemble'),
+    path('ensembles/create', views.CreateEnsembleView.as_view(), name='create_ensemble')
 ]

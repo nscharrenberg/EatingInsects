@@ -1,12 +1,12 @@
 from django.shortcuts import render
 from django.views.generic import FormView
 
-from app.business import predictors
+from app.business import ensembles
 from app.forms.prediction_form import PredictionForm
 
 
-class PredictionView(FormView):
-    template_name = "prediction/form.html"
+class EnsemblePredictionView(FormView):
+    template_name = "prediction/ensemble.html"
 
     def get_context_data(self, **kwargs):
         form = PredictionForm()
@@ -28,7 +28,7 @@ class PredictionView(FormView):
         context['form'] = form
 
         if form.is_valid():
-            context['protein'] = predictors.predict(form)
+            context['prediction'], context['predictions'] = ensembles.predict(form)
 
         return self.render_page(request, context)
 

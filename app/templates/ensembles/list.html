@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Protein Property Predictor - Models</title>
+    <title>Protein Property Predictor - Ensembles</title>
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <style>
@@ -50,10 +50,10 @@
               <a class="nav-link" href="{% url 'predict_ensemble' %}">Ensemble Predict</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="{% url 'all_model' %}">Model Builder</a>
+              <a class="nav-link" href="{% url 'all_model' %}">Model Builder</a>
             </li>
               <li class="nav-item">
-              <a class="nav-link" href="{% url 'all_ensemble' %}">Ensembler</a>
+              <a class="nav-link active" aria-current="page" href="{% url 'all_ensemble' %}">Ensembler</a>
             </li>
           </ul>
         </div>
@@ -98,40 +98,29 @@
         </div>
         <div class="my-3 p-3 bg-body rounded shadow-sm">
             <div class="d-flex justify-content-between border-bottom pb-2 mb-0 ">
-              <h3>Models</h3>
-              <a href="{% url 'create_model' %}" class="btn btn-primary">
+              <h3>Ensemble Models</h3>
+              <a href="{% url 'create_ensemble' %}" class="btn btn-primary">
                 <i class="bi bi-plus flex-shrink-0 me-2"></i> Create </a>
             </div>
             <table class="table table-hover">
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>Slug</th>
-                  <th>Model</th>
-                  <th>Property to Predict</th>
-                  <th>Version</th>
-                  <th>Timestamp</th>
-                  <th>Status</th>
+                  <th>Name</th>
+                  <th>Models</th>
+                    <th>Created At</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody> {% for model in models %} <tr>
                   <th scope="row">{{ model.id }}</th>
-                  <td>{{ model.slug }}</td>
-                  <td>{{ model.model_type }}</td>
-                  <td>{{ model.prediction_type }}</td>
-                  <td>{{ model.version }}</td>
+                  <td>{{ model.name }}</td>
+                  <td>{% for predictor in model.predictors.all %}
+                      {{ predictor }},
+                      {% endfor %}</td>
                   <td>{{ model.created_at | date:'Y-m-d H:i'  }}</td>
-                  <td>{{ model.status }}</td>
                   <td>
-                    <div class="btn-group" role="group" aria-label="Basic outlined example">
-                      <a href="{% url 'update_model' slug=model.slug %}" class="btn btn-outline-primary">
-                        <i class="bi bi-pencil"></i>
-                      </a>
-                      <a href="{% url 'delete_model' slug=model.slug %}" class="btn btn-danger">
-                        <i class="bi bi-trash"></i>
-                      </a>
-                    </div>
+
                   </td>
                 </tr> {% endfor %} </tbody>
             </table>

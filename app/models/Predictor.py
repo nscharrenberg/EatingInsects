@@ -25,8 +25,11 @@ class Predictor(models.Model):
     rmse = models.DecimalField(decimal_places=6, max_digits=12, null=True)
     mae = models.DecimalField(decimal_places=6, max_digits=12, null=True)
 
+    class Meta:
+        ordering = ['slug', 'created_at', 'rmse']
+
     def __str__(self):
-        return '{}-{}'.format(self.slug, self.status)
+        return '{}'.format(self.slug)
 
     def get_prediction_type_label(self):
         return
