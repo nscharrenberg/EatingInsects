@@ -1,7 +1,7 @@
 import numpy as np
 
 from app.business import predictors
-from app.models.EnsembleModel import EnsembleModel
+from app.models import EnsembleModel, EnsembleModelType
 
 import pandas as pd
 
@@ -30,6 +30,7 @@ def create(form) -> EnsembleModel:
 
     predictors = form['selected_models'].value()
     name = form['name'].value()
+    ensembleStyle = form['ensemblestyle'].value()
 
     found_ensemble = get_by_name(name)
 
@@ -39,10 +40,18 @@ def create(form) -> EnsembleModel:
     ensemble = EnsembleModel(name=name)
     ensemble.save()
 
+    ensemble.ensembleStyle = ensembleStyle
+    
     for predictor in predictors:
         ensemble.predictors.add(predictor)
 
     return ensemble
+
+def load_network(style):
+    if style == EnsembleModelType.WA.value:
+        return 'WA'
+    if style == EnsembleModelType.AVG.value:
+        return 'AVG'
 
 
 def predict(form):
@@ -61,18 +70,34 @@ def predict(form):
 
     ensemble = get_by_id(form_ensemble.id)
 
+    style = load_network(ensemble.ensembleStyle)
     predictions = []
     sum_val = 0
+    invWeights = []
 
     for predictor in ensemble.predictors.all():
         cleaned_data['selected_model'] = predictor
         prediction = predictors.predict(form)
-
         predictions.append(prediction)
+        invWeights.append(predictor.rmse)
         sum_val += prediction.solubility
 
-    # averaging
-    avg = sum_val / len(predictions)
-    avg = round(float(avg), 2)
+    reWeights = [1-float(x)/float(sum_val) for x in invWeights]
+    weights = [x/sum(reWeights) for x in reWeights]
 
-    return avg, predictions
+    result = 0
+    
+    if(style == 'AVG'):    # normal averaging
+        avg = sum_val / len(predictions)
+        avg = round(float(avg), 2)
+        result = avg
+    else:    # weighted averaging
+        wavg = 0
+
+        for i, predict in enumerate(predictions):
+            wavg += float(predict.solubility)*weights[i]
+
+        wavg = round(float(wavg),2)
+        result = wavg
+
+    return result, predictions
