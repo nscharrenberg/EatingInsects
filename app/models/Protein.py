@@ -50,6 +50,7 @@ class Protein(models.Model):
         }
 
     def to_dataFrame(self):
+        from app.networks.utils.processing_utils import ProcessingUtils
         df = pd.DataFrame(data=[
             [
                 float(self.yield_um),
@@ -66,10 +67,7 @@ class Protein(models.Model):
                 float(self.sheet_probability)
             ]
         ],
-            columns=['Yield(uM)', 'Yield(ug/ml)', 'Calculated MW(kDa)', 'Calculated pI',
-                     'Sequence length', 'Sequence mass', 'steric_parameter',
-                     'polarizability', 'volume', 'hydrophobicity', 'helix_probability',
-                     'sheet_probability'])
+            columns=ProcessingUtils.get_expected_dataset_columns())
 
         return df
 
