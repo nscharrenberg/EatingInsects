@@ -10,7 +10,7 @@
     An application that uses machine learning techniques to make a predictions on certain properties such as Solubility.
     <br/>
     <br/>
-    <a href="https://github.com/nscharrenberg/EatingInsects"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/nscharrenberg/EatingInsects/wiki"><strong>Explore the docs »</strong></a>
     <br/>
     <br/>
     <a href="https://github.com/nscharrenberg/EatingInsects/wiki">Wiki</a>
