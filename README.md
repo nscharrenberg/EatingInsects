@@ -10,10 +10,10 @@
     An application that uses machine learning techniques to make a predictions on certain properties such as Solubility.
     <br/>
     <br/>
-    <a href="https://github.com/nscharrenberg/EatingInsects"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/nscharrenberg/EatingInsects/wiki"><strong>Explore the docs »</strong></a>
     <br/>
     <br/>
-    <a href="https://github.com/nscharrenberg/EatingInsects">View Demo</a>
+    <a href="https://github.com/nscharrenberg/EatingInsects/wiki">Wiki</a>
     .
     <a href="https://github.com/nscharrenberg/EatingInsects/issues">Report Bug</a>
     .
@@ -254,7 +254,7 @@ Contributions are what make the open source community such an amazing place to b
 ## Authors
 
 * **Noah Scharrenberg** - *Bsc DSAI Student & Software Engineer* - [Noah Scharrenberg](https://github.com/nscharrenberg) - *Project Lead*
-* **Bunyamin Thijssen** - *Bsc DSAI Student * - [Bunyamin Thijssen]() - *Research & Developer*
+* **Bunyamin Thijssen** - *Bsc DSAI Student* - [Bunyamin Thijssen](https://github.com/Wisekik) - *Research & Developer*
 * **Claudia Sanchez** - *Bsc DSAI Student* - [Claudia Sanchez](https://github.com/clausanchezm) - *Research & Developer*
 * **Parand Mohri** - *Bsc DSAI Student* - [Parand Mohri](https://github.com/Parand-Mohri) - *Research & Developer*
 * **Mohammad Fayazi** - *Bsc DSAI Student* - [Mohammad Fayazi](https://github.com/MohammadFayazi) - *Research & Developer*

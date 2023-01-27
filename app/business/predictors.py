@@ -8,8 +8,11 @@ from app.models.PredictionStatus import PredictionStatus
 from app.networks.DT.DT import DT
 from app.networks.LR.LR import LR
 from app.networks.RF.random_forest import RF
+from app.networks.utils.processing_utils import ProcessingUtils
+from app.networks.LR.Linear_Regression import LR
 from app.networks.SNN.snn import SNN
 from app.networks.SNN.snn_v2 import SNN2
+
 
 
 def get_all():
